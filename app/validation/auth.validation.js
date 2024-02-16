@@ -7,9 +7,6 @@ const register = yup.object().shape({
     .required('Email is required!')
     .email('Please enter a valid email')
     .trim(),
-  agreePolicy: yup
-    .boolean()
-    .oneOf([true], 'You must accept the terms and conditions'),
 });
 
 const activate = yup.object().shape({
@@ -24,11 +21,15 @@ const recover = yup.object().shape({
 });
 
 const login = yup.object().shape({
-  password: yup.string().required('Password is required!').trim(),
+  password: yup
+    .string()
+    .required('Please enter your password.')
+    .min(8, 'Password must be at leats 8 characters')
+    .trim(),
   email: yup
     .string()
     .email('Must be a valid email address')
-    .required('Email is required!')
+    .required('Please enter your email address.')
     .trim(),
 });
 

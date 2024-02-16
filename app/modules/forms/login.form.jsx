@@ -3,21 +3,18 @@ import {useForm} from 'react-hook-form';
 
 import {yupResolver} from '@hookform/resolvers/yup';
 import {useState} from 'react';
-import {useNavigation} from '@react-navigation/native';
+
 import authValidation from '../../validation/auth.validation';
 import Input from '../../components/input/index';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {useNavigation} from '@react-navigation/native';
 
 export default function LoginForm() {
   const navigation = useNavigation();
 
   const [loading, setLoading] = useState(false);
 
-  const {
-    handleSubmit,
-    control,
-    formState: {errors},
-  } = useForm({
+  const {handleSubmit, control} = useForm({
     resolver: yupResolver(authValidation.login),
     defaultValues: {
       email: '',
@@ -25,14 +22,7 @@ export default function LoginForm() {
     },
   });
 
-  const onSubmit = data => {
-    reqLogin({email: data.email.trim(), password: data.password.trim()});
-  };
-
-  const handleActivate = () => {
-    navigation.navigate('Activate');
-    setActivate(false);
-  };
+  const onSubmit = data => {};
 
   return (
     <VStack space={3} mt={8}>
@@ -52,23 +42,24 @@ export default function LoginForm() {
         name="password"
         control={control}
         iconsize={5}
-        // icon={<MaterialIcons name="lock" />}
+        icon={<MaterialIcons name="lock" size={24} color="green" />}
       />
       <Link
         _text={{
-          fontSize: 'xs',
+          fontSize: 'md',
           fontWeight: '500',
           color: 'primary.900',
         }}
         alignSelf="flex-end"
-        onPress={() => navigation.navigate('Forgot')}>
-        Forget Password?
+        onPress={() => navigation.navigate('AUTHREGISTERSCREEN')}>
+        Recover access?
       </Link>
       <Button
         isLoading={loading}
         isLoadingText="Signing in.."
         onPress={handleSubmit(onSubmit)}
         bg="primary.900"
+        p={2}
         size="lg"
         style={{borderRadius: 25, height: 45, marginTop: 4}}>
         Sign In
@@ -76,7 +67,7 @@ export default function LoginForm() {
 
       <HStack mt="6" justifyContent="center">
         <Text
-          fontSize="sm"
+          fontSize="lg"
           color="coolGray.600"
           _dark={{
             color: 'warmGray.200',
@@ -87,8 +78,13 @@ export default function LoginForm() {
           _text={{
             fontWeight: '600',
             color: 'primary.900',
+            fontSize: 'lg',
           }}
-          onPress={() => navigation.navigate('Register')}
+          onPress={() =>
+            navigation.navigate('AuthStack', {
+              screen: 'AUTHREMINDERSCREEN',
+            })
+          }
           alignSelf="flex-end">
           Sign Up
         </Link>

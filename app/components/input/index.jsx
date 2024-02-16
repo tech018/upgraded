@@ -8,7 +8,7 @@ const inputs = {
   'text-input': TextInput,
   'select-input': SelectInput,
   'secure-input': SecureInput,
-  'checkbox-inout': CheckBoxInput,
+  'checkbox-input': CheckBoxInput,
 };
 
 const Input = forwardRef(({variant, ...props}, ref) => {

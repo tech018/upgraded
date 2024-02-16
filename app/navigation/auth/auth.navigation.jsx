@@ -8,7 +8,13 @@ export default function AuthNavigation() {
   const {Navigator, Screen} = AuthStack;
 
   return (
-    <Navigator initialRouteName="AUTHLOGINSCREEN">
+    <Navigator
+      initialRouteName="AUTHLOGINSCREEN"
+      screenOptions={{
+        headerStyle: {backgroundColor: '#02851f'},
+        headerTintColor: '#ffffff',
+        headerTitleAlign: 'center',
+      }}>
       {AuthScreens.map(screen => (
         <Screen
           key={screen.name}
