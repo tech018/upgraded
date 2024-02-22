@@ -7,12 +7,15 @@ import {useNavigation} from '@react-navigation/native';
 import validation from '../../validation/auth.validation';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {NAVIGATION_NAME} from '../../navigation/auth/config';
-import {usePostRegisterMutation} from '../../store/auth.slice';
+import {ucredentials, usePostRegisterMutation} from '../../store/auth.slice';
 import {Platform} from 'react-native';
+import {useDispatch} from 'react-redux';
+
 export default function RegisterForm() {
   const [reqRegister, {data, error, isError, isLoading, isSuccess}] =
     usePostRegisterMutation();
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const [loading, setLoading] = useState(false);
   const {handleSubmit, control} = useForm({
@@ -39,6 +42,8 @@ export default function RegisterForm() {
   useEffect(() => {
     if (isSuccess) {
       setLoading(false);
+      dispatch(ucredentials({email: data.email, token: null}));
+      navigation.navigate('AuthStack', {screen: NAVIGATION_NAME.ACTIVATE});
     }
   }, [isSuccess]);
 

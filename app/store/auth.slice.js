@@ -6,11 +6,11 @@ const initialState = {
   email: null,
 };
 
-export const userSlice = createSlice({
-  name: 'user',
+export const authSlice = createSlice({
+  name: 'credentials',
   initialState,
   reducers: {
-    login: (state, action) => ({
+    ucredentials: (state, action) => ({
       ...state,
       token: action.payload.token,
       email: action.payload.email,
@@ -18,47 +18,47 @@ export const userSlice = createSlice({
   },
 });
 
-export const {login, mailActive, mailChange} = userSlice.actions;
+export const {ucredentials} = authSlice.actions;
 
-export default userSlice.reducer;
+export default authSlice.reducer;
 
-export const userApiSlice = apiSlice.injectEndpoints({
+export const authApiSlice = apiSlice.injectEndpoints({
   endpoints: builder => ({
     PostRegister: builder.mutation({
       query: args => ({
-        url: '/api/v1/register',
+        url: '/auth/v1/register',
         method: 'POST',
         body: args,
       }),
     }),
-    PostActivateUser: builder.mutation({
+    PutActivateUser: builder.mutation({
       query: args => ({
-        url: `/api/users/verifyEmail?verificationCode=${args.OTP}&email=${args.email}`,
-        method: 'POST',
+        url: `/auth/v1/activate?email=${args.email}&otp=${args.otp}`,
+        method: 'PUT',
         body: args,
       }),
     }),
-    PostForgotPass: builder.mutation({
+    PutRecoverAccess: builder.mutation({
       query: args => ({
-        url: `/api/users/forgotpassword?email=${args.email}`,
-        method: 'POST',
+        url: `/auth/v1/recoveraccess?email=${args.email}`,
+        method: 'PUT',
       }),
     }),
     PutChangePass: builder.mutation({
       query: args => ({
-        url: `/api/users/changepassword?email=${args.email}&otp=${args.OTP}&password=${args.password}`,
+        url: `/auth/v1/changepassword?email=${args.email}&otp=${args.otp}&password=${args.password}`,
         method: 'PUT',
       }),
     }),
     PostResendCode: builder.mutation({
       query: args => ({
-        url: `/api/users/resendcode?email=${args.email}`,
+        url: `/auth/v1/resendcode?email=${args.email}`,
         method: 'POST',
       }),
     }),
     PostLoginUser: builder.mutation({
       query: args => ({
-        url: '/api/users',
+        url: '/auth/v1/login',
         method: 'POST',
         body: args,
       }),
@@ -69,9 +69,9 @@ export const userApiSlice = apiSlice.injectEndpoints({
 
 export const {
   usePostRegisterMutation,
-  usePostActivateUserMutation,
-  usePostForgotPassMutation,
+  usePutActivateUserMutation,
+  usePutRecoverAccessMutation,
   usePutChangePassMutation,
   usePostResendCodeMutation,
   usePostLoginUserMutation,
-} = userApiSlice;
+} = authApiSlice;

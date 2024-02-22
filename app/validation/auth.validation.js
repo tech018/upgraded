@@ -18,7 +18,10 @@ const register = yup.object().shape({
 });
 
 const activate = yup.object().shape({
-  OTP: yup.number().required('OTP is required!'),
+  otp: yup
+    .string()
+    .matches(/^\d{6}$/, 'Enter a valid 6-digit OTP')
+    .required('OTP is required'),
 });
 
 const recover = yup.object().shape({
