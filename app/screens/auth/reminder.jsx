@@ -1,7 +1,10 @@
-import {Button, StyleSheet, View, ScrollView, Text} from 'react-native';
+import {StyleSheet, ScrollView, Platform} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import AccordionItem from '../../components/accordion';
 import {useState} from 'react';
+import {Box, Checkbox, Button} from 'native-base';
+import {useNavigation} from '@react-navigation/native';
+import {NAVIGATION_NAME} from '../../navigation/auth/config';
 
 const data = [
   '1.This document outlines the terms and conditions for using the Online Gate Pass ID application at Tarlac Agricultural University.By using the platform, you consent to the collection, processing, and storage of your personal information for the purpose of accessing services, improving them, and receiving relevant updates. Your information may be shared with trusted third parties, and security measures are in place to protect it. You are responsible for safeguarding your account credentials, and withdrawal of consent is possible but may impact service features. The terms can be amended, and the document is governed by applicable laws. For inquiries, contact the provided information. Using the services implies agreement with these terms.',
@@ -12,9 +15,17 @@ const data = [
 ];
 
 export default function Reminder() {
+  const navigation = useNavigation();
   const [expanded, setExpanded] = useState(0);
+  const [check, setCheck] = useState(false);
+
   function toggleItem(id) {
     setExpanded(id);
+  }
+
+  function CheckButtonPress() {
+    if (!check) return setCheck(true);
+    return setCheck(false);
   }
 
   return (
@@ -31,6 +42,27 @@ export default function Reminder() {
             title={item}
           />
         ))}
+
+        <Box style={styles.checkBoxArea}>
+          <Checkbox
+            shadow={2}
+            isChecked={check}
+            onChange={CheckButtonPress}
+            accessibilityLabel="This is a dummy checkbox">
+            I accept the terms & conditions
+          </Checkbox>
+          <Button
+            disabled={check ? false : true}
+            marginTop={5}
+            onPress={() =>
+              navigation.navigate('AuthStack', {
+                screen: NAVIGATION_NAME.REGISTER,
+              })
+            }
+            colorScheme="success">
+            Proceed
+          </Button>
+        </Box>
       </ScrollView>
     </SafeAreaView>
   );
@@ -41,6 +73,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingLeft: 10,
     paddingRight: 10,
+    marginTop: Platform.OS === 'android' ? 20 : 0,
   },
 
   textSmall: {
@@ -49,4 +82,5 @@ const styles = StyleSheet.create({
   seperator: {
     height: 12,
   },
+  checkBoxArea: {paddingTop: 20, margin: 'auto'},
 });

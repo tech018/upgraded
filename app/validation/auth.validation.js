@@ -1,10 +1,18 @@
 import * as yup from 'yup';
 const register = yup.object().shape({
-  password: yup.string().required('Password is required!').trim(),
-  mobile: yup.string().required('Mobile number is required!').trim(),
+  password: yup
+    .string()
+    .required('Password enter your desired password')
+    .min(8, 'Must be atleast 8 characters')
+    .trim(),
+  mobile: yup
+    .string()
+    .required('Please enter your mobile number')
+    .min(11, 'Must be atleast 11 characters')
+    .trim(),
   email: yup
     .string()
-    .required('Email is required!')
+    .required('Please enter your email')
     .email('Please enter a valid email')
     .trim(),
 });

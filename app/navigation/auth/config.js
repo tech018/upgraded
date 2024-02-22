@@ -2,7 +2,7 @@ import Login from '../../screens/auth/login';
 import Register from '../../screens/auth/register';
 import Reminder from '../../screens/auth/reminder';
 
-const NAVIGATION_NAME = {
+export const NAVIGATION_NAME = {
   LOGIN: 'AUTHLOGINSCREEN',
   REGISTER: 'AUTHREGISTERSCREEN',
   ACTIVATE: 'AUTHACTIVATESCREEN',

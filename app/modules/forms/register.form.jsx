@@ -6,7 +6,12 @@ import Input from '../../components/input/index';
 import {useNavigation} from '@react-navigation/native';
 import validation from '../../validation/auth.validation';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {NAVIGATION_NAME} from '../../navigation/auth/config';
+import {usePostRegisterMutation} from '../../store/auth.slice';
+import {Platform} from 'react-native';
 export default function RegisterForm() {
+  const [reqRegister, {data, error, isError, isLoading, isSuccess}] =
+    usePostRegisterMutation();
   const navigation = useNavigation();
 
   const [loading, setLoading] = useState(false);
@@ -19,7 +24,39 @@ export default function RegisterForm() {
     },
   });
 
-  const onSubmit = data => {};
+  useEffect(() => {
+    if (isLoading) {
+      setLoading(true);
+    }
+  }, [isLoading]);
+
+  useEffect(() => {
+    if (isError) {
+      setLoading(false);
+    }
+  }, [isError]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      setLoading(false);
+    }
+  }, [isSuccess]);
+
+  function lowerCaseFirstLetter(string) {
+    return string.charAt(0).toLowerCase() + string.slice(1);
+  }
+
+  const onSubmit = data => {
+    if (Platform.OS === 'ios') {
+      reqRegister({
+        email: lowerCaseFirstLetter(data.email),
+        password: data.password,
+        mobile: data.mobile,
+      });
+    } else {
+      reqRegister(data);
+    }
+  };
 
   return (
     <VStack space={3} mt={8}>
@@ -76,7 +113,9 @@ export default function RegisterForm() {
               fontWeight: '600',
               color: 'primary.900',
             }}
-            onPress={() => navigation.navigate('Login')}
+            onPress={() =>
+              navigation.navigate('AuthStack', {screen: NAVIGATION_NAME.LOGIN})
+            }
             alignSelf="flex-end">
             Sign In
           </Link>

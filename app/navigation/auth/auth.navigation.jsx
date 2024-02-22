@@ -14,6 +14,7 @@ export default function AuthNavigation() {
         headerStyle: {backgroundColor: '#02851f'},
         headerTintColor: '#ffffff',
         headerTitleAlign: 'center',
+        headerBackTitleVisible: false,
       }}>
       {AuthScreens.map(screen => (
         <Screen
