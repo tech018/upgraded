@@ -1,16 +1,29 @@
-import {VStack, Button, Link, HStack, Text, Icon} from 'native-base';
+import {
+  VStack,
+  Button,
+  Link,
+  HStack,
+  Text,
+  Icon,
+  useToast,
+  Box,
+} from 'native-base';
 import {useForm} from 'react-hook-form';
 
 import {yupResolver} from '@hookform/resolvers/yup';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 
 import authValidation from '../../validation/auth.validation';
 import Input from '../../components/input/index';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useNavigation} from '@react-navigation/native';
+import {usePostLoginUserMutation} from '../../store/auth.slice';
 
 export default function LoginForm() {
+  const toast = useToast();
   const navigation = useNavigation();
+  const [reqLogin, {data, isError, isLoading, isSuccess, error}] =
+    usePostLoginUserMutation();
 
   const [loading, setLoading] = useState(false);
 
@@ -22,7 +35,37 @@ export default function LoginForm() {
     },
   });
 
-  const onSubmit = data => {};
+  useEffect(() => {
+    if (isError) {
+      setLoading(false);
+      console.log('error', error);
+      toast.show({
+        render: () => {
+          return (
+            <Box bg="red.800" px="2" py="1" rounded="sm" mb={5}>
+              <Text color="#ffffff"> {error.data.message}</Text>
+            </Box>
+          );
+        },
+      });
+    }
+  }, [isError]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      setLoading(false);
+    }
+  }, [isSuccess]);
+
+  useEffect(() => {
+    if (isLoading) {
+      setLoading(true);
+    }
+  }, [isLoading]);
+
+  const onSubmit = data => {
+    reqLogin(data);
+  };
 
   return (
     <VStack space={3} mt={8}>

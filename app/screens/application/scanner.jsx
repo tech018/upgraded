@@ -6,15 +6,14 @@
 import React, {Component} from 'react';
 import * as BlinkIDReactNative from 'blinkid-react-native';
 import {
-  AppRegistry,
   Platform,
   StyleSheet,
   Text,
   View,
   Image,
   ScrollView,
-  Button,
 } from 'react-native';
+import {Button} from 'native-base';
 
 const licenseKey = Platform.select({
   // iOS license key for applicationID: com.microblink.sample
@@ -55,7 +54,7 @@ function buildDateResult(result, key) {
   return '';
 }
 
-export default class Sample extends Component {
+export default class DriversLicense extends Component {
   constructor(props) {
     super(props);
 
@@ -300,11 +299,27 @@ export default class Sample extends Component {
     let displayImageFace = this.state.resultImageFace;
     let displaySuccessFrame = this.state.successFrame;
     let displayFields = this.state.results;
+    console.log('result', this.state.results);
     return (
       <View style={styles.container}>
-        <Text style={styles.label}>BlinkID</Text>
+        <Text style={styles.label}>Let's scan your Driver's License</Text>
         <View style={styles.buttonContainer}>
-          <Button onPress={this.scan.bind(this)} title="Scan" color="#48B2E8" />
+          {renderIf(
+            this.state.results.length <= 1,
+            <Image
+              source={require('../../assets/images/scan.png')}
+              style={{width: 350, height: 320}}
+            />,
+          )}
+
+          <Button
+            w="100%"
+            onPress={this.scan.bind(this)}
+            title="Click to Scan"
+            bg="primary.900"
+            mt={10}>
+            Click to scan
+          </Button>
         </View>
         <ScrollView
           automaticallyAdjustContentInsets={false}
@@ -366,7 +381,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5FCFF',
   },
   label: {
-    fontSize: 30,
+    fontSize: 25,
     textAlign: 'center',
     marginTop: 50,
   },
@@ -391,5 +406,3 @@ const styles = StyleSheet.create({
     margin: 10,
   },
 });
-
-AppRegistry.registerComponent('Sample', () => Sample);

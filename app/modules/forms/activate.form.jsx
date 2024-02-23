@@ -47,7 +47,7 @@ const ActivateForm = () => {
           );
         },
       });
-      navigate.navigate('AuthStack', {screen: data.redirect});
+      navigate.navigate('ApplicationStack', {screen: data.redirect});
       2342;
     }
   }, [isSuccess, data]);
