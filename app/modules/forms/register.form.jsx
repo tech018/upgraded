@@ -1,4 +1,13 @@
-import {VStack, Button, Link, HStack, Text, Icon} from 'native-base';
+import {
+  VStack,
+  Button,
+  Link,
+  HStack,
+  Text,
+  Icon,
+  useToast,
+  Box,
+} from 'native-base';
 import {useEffect, useState} from 'react';
 import {useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
@@ -16,7 +25,7 @@ export default function RegisterForm() {
     usePostRegisterMutation();
   const navigation = useNavigation();
   const dispatch = useDispatch();
-
+  const toast = useToast();
   const [loading, setLoading] = useState(false);
   const {handleSubmit, control} = useForm({
     resolver: yupResolver(validation.register),
@@ -36,8 +45,17 @@ export default function RegisterForm() {
   useEffect(() => {
     if (isError) {
       setLoading(false);
+      toast.show({
+        render: () => {
+          return (
+            <Box bg="red.800" px="2" py="1" rounded="sm" mb={5}>
+              <Text color="#ffffff"> {error.data.message}</Text>
+            </Box>
+          );
+        },
+      });
     }
-  }, [isError]);
+  }, [isError, error]);
 
   useEffect(() => {
     if (isSuccess) {

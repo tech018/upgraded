@@ -94,7 +94,7 @@ export default function LoginForm() {
           color: 'primary.900',
         }}
         alignSelf="flex-end"
-        onPress={() => navigation.navigate('AUTHREGISTERSCREEN')}>
+        onPress={() => navigation.navigate('AUTHRECOVERSCREEN')}>
         Recover access?
       </Link>
       <Button

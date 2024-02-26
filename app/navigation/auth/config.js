@@ -1,5 +1,6 @@
 import Activate from '../../screens/auth/activate';
 import Login from '../../screens/auth/login';
+import Recover from '../../screens/auth/recover';
 import Register from '../../screens/auth/register';
 import Reminder from '../../screens/auth/reminder';
 
@@ -40,6 +41,11 @@ const AuthScreens = [
     title: NAVIGATION_TITLE.ACTIVATE,
     name: NAVIGATION_NAME.ACTIVATE,
     component: Activate,
+  },
+  {
+    title: NAVIGATION_TITLE.RECOVER,
+    name: NAVIGATION_NAME.RECOVER,
+    component: Recover,
   },
 ];
 
