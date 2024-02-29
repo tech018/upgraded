@@ -59,8 +59,8 @@ export const authApiSlice = apiSlice.injectEndpoints({
     }),
     PutChangePass: builder.mutation({
       query: args => ({
-        url: `/auth/v1/changepassword?email=${args.email}&otp=${args.otp}&password=${args.password}`,
-        method: 'PUT',
+        url: `/auth/v1/changepassword?email=${args.email}&otp=${args.otp}&newpassword=${args.password}`,
+        method: 'POST',
       }),
     }),
     PostResendCode: builder.mutation({

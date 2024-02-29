@@ -1,5 +1,5 @@
-import {Box, Button, Center, Text, VStack} from 'native-base';
-import {useState} from 'react';
+import {Box, Button, Center, Text, VStack, useToast} from 'native-base';
+import {useEffect, useState} from 'react';
 import {StyleSheet} from 'react-native';
 import Input from '../../components/input';
 import {useForm} from 'react-hook-form';
@@ -9,14 +9,23 @@ import {useDispatch, useSelector} from 'react-redux';
 import {uotp} from '../../store/auth.slice';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {usePutChangePassMutation} from '../../store/auth.slice';
+import {useNavigation} from '@react-navigation/native';
 
-function OTPForm({setActive, active, dispatch, updateotp}) {
+function OTPForm({setActive, active, dispatch, updateotp, error}) {
   const {handleSubmit, control, setError} = useForm({
     resolver: yupResolver(authValidation.activate),
     defaultValues: {
-      otp: '',
+      otp: 0,
     },
   });
+
+  console.log('err', error);
+
+  useEffect(() => {
+    if (error?.status === 401) {
+      setError('otp', {type: 'custom', message: error.data.message});
+    }
+  }, [error, setError]);
 
   const onSubmit = data => {
     dispatch(updateotp(data.otp));
@@ -31,8 +40,6 @@ function OTPForm({setActive, active, dispatch, updateotp}) {
         <Input variant="otp-input" control={control} maxlength={6} name="otp" />
       </Box>
       <Button
-        // isLoading={loading}
-        // isLoadingText="Signing up..please wait.."
         onPress={handleSubmit(onSubmit)}
         bg="primary.900"
         size="lg"
@@ -43,7 +50,7 @@ function OTPForm({setActive, active, dispatch, updateotp}) {
   );
 }
 
-function Password({auth, passRequest}) {
+function Password({auth, passRequest, loading}) {
   const {handleSubmit, control, setError} = useForm({
     resolver: yupResolver(authValidation.changePass),
     defaultValues: {
@@ -54,9 +61,9 @@ function Password({auth, passRequest}) {
 
   const onSubmit = data => {
     passRequest({
-      email: auth.changePass.email,
+      email: auth.changepass.email,
       password: data.newpassword,
-      otp: auth.changePass.otp,
+      otp: auth.changepass.otp,
     });
   };
 
@@ -89,25 +96,60 @@ function Password({auth, passRequest}) {
       </Box>
 
       <Button
-        // isLoading={loading}
-        // isLoadingText="Signing up..please wait.."
+        isLoading={loading}
+        isLoadingText="Changing password.."
         onPress={handleSubmit(onSubmit)}
         bg="primary.900"
         size="lg"
         style={{borderRadius: 25, height: 45, marginTop: 18}}>
-        Next
+        Change Password
       </Button>
     </Box>
   );
 }
 
 export default function ChangePassword() {
+  const [loading, setLoading] = useState(false);
+  const toast = useToast();
   const [reqChangePass, {data, isError, isLoading, isSuccess, error}] =
     usePutChangePassMutation();
   const auth = useSelector(state => state.auth);
-  console.log('auth', auth);
   const [active, setActive] = useState(1);
   const dispatch = useDispatch();
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    if (isError) {
+      setLoading(false);
+
+      if (error.status === 401) {
+        setActive(error.data.authCode);
+      }
+    }
+  }, [isError, error, setActive]);
+
+  useEffect(() => {
+    if (isLoading) {
+      setLoading(true);
+    }
+  }, [isLoading]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      setLoading(false);
+      toast.show({
+        render: () => {
+          return (
+            <Box bg="emerald.500" px="2" py="1" rounded="sm" mb={5}>
+              <Text color="#ffffff"> {data.message}</Text>
+            </Box>
+          );
+        },
+      });
+      navigation.navigate('AuthStack', {screen: data.redirect});
+    }
+  }, [isSuccess, data]);
+
   return (
     <VStack flex={1}>
       <Center px="5" flex={1} gap={2} flexDir="row">
@@ -126,9 +168,10 @@ export default function ChangePassword() {
           updateotp={uotp}
           setActive={setActive}
           active={active}
+          error={error}
         />
       ) : (
-        <Password auth={auth} passRequest={reqChangePass} />
+        <Password auth={auth} loading={loading} passRequest={reqChangePass} />
       )}
     </VStack>
   );
