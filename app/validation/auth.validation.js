@@ -45,8 +45,15 @@ const login = yup.object().shape({
 });
 
 const changePass = yup.object().shape({
-  password: yup.string().required('Password is required!'),
-  OTP: yup.string().required('OTP is required!'),
+  newpassword: yup
+    .string()
+    .required('Password is required')
+    .min(8, 'Must atleast 8 Characters'),
+  confirmpassword: yup
+    .string()
+    .required('Confirm password is required')
+    .min(8, 'Must atleast 8 Characters')
+    .oneOf([yup.ref('newpassword')], 'Your passwords do not match.'),
 });
 
 export default {

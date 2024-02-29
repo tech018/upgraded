@@ -1,7 +1,5 @@
 import {Center, Box, Text, VStack} from 'native-base';
 import ActivateForm from '../../modules/forms/activate.form';
-import unlockIcon from '../../assets/images/unlock.png';
-import {Image} from 'react-native';
 export default function Activate() {
   return (
     <VStack flex={1}>

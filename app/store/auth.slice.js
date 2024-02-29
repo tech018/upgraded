@@ -4,6 +4,11 @@ import apiSlice from './api.slice';
 const initialState = {
   token: null,
   email: null,
+  changepass: {
+    otp: null,
+    newpassword: null,
+    email: null,
+  },
 };
 
 export const authSlice = createSlice({
@@ -15,10 +20,18 @@ export const authSlice = createSlice({
       token: action.payload.token,
       email: action.payload.email,
     }),
+    uotp: (state, action) => {
+      state.changepass.otp = action.payload;
+      return state;
+    },
+    uemail: (state, action) => {
+      state.changepass.email = action.payload;
+      return state;
+    },
   },
 });
 
-export const {ucredentials} = authSlice.actions;
+export const {ucredentials, uotp, uemail} = authSlice.actions;
 
 export default authSlice.reducer;
 
@@ -41,7 +54,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
     PutRecoverAccess: builder.mutation({
       query: args => ({
         url: `/auth/v1/recoveraccess?email=${args.email}`,
-        method: 'PUT',
+        method: 'POST',
       }),
     }),
     PutChangePass: builder.mutation({

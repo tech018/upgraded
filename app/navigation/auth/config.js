@@ -1,4 +1,5 @@
 import Activate from '../../screens/auth/activate';
+import ChangePassword from '../../screens/auth/changepass';
 import Login from '../../screens/auth/login';
 import Recover from '../../screens/auth/recover';
 import Register from '../../screens/auth/register';
@@ -19,6 +20,7 @@ const NAVIGATION_TITLE = {
   RECOVER: 'Recover Access',
   REMINDER: 'Reminders',
   ACTIVATE: 'Activate Account',
+  CHANGEPASS: 'Change Password',
 };
 
 const AuthScreens = [
@@ -46,6 +48,11 @@ const AuthScreens = [
     title: NAVIGATION_TITLE.RECOVER,
     name: NAVIGATION_NAME.RECOVER,
     component: Recover,
+  },
+  {
+    title: NAVIGATION_TITLE.CHANGEPASS,
+    name: NAVIGATION_NAME.CHANGEPASS,
+    component: ChangePassword,
   },
 ];
 

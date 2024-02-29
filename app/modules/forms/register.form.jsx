@@ -19,6 +19,7 @@ import {NAVIGATION_NAME} from '../../navigation/auth/config';
 import {ucredentials, usePostRegisterMutation} from '../../store/auth.slice';
 import {Platform} from 'react-native';
 import {useDispatch} from 'react-redux';
+import converter from '../../helpers/converter';
 
 export default function RegisterForm() {
   const [reqRegister, {data, error, isError, isLoading, isSuccess}] =
@@ -65,14 +66,10 @@ export default function RegisterForm() {
     }
   }, [isSuccess]);
 
-  function lowerCaseFirstLetter(string) {
-    return string.charAt(0).toLowerCase() + string.slice(1);
-  }
-
   const onSubmit = data => {
     if (Platform.OS === 'ios') {
       reqRegister({
-        email: lowerCaseFirstLetter(data.email),
+        email: converter.lowerCaseFirstLetter(data.email),
         password: data.password,
         mobile: data.mobile,
       });
