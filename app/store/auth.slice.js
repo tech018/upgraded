@@ -76,6 +76,13 @@ export const authApiSlice = apiSlice.injectEndpoints({
         body: args,
       }),
     }),
+    PostRequirements: builder.mutation({
+      query: args => ({
+        url: `/application/v1/requirements?data=${args.data}`,
+        method: 'POST',
+        body: args,
+      }),
+    }),
   }),
   overrideExisting: true,
 });
@@ -87,4 +94,5 @@ export const {
   usePutChangePassMutation,
   usePostResendCodeMutation,
   usePostLoginUserMutation,
+  usePostRequirementsMutation,
 } = authApiSlice;

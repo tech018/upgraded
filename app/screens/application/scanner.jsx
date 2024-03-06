@@ -14,7 +14,8 @@ import {
   ScrollView,
 } from 'react-native';
 import {Button} from 'native-base';
-import {MICRO_BLINK_ANDROID, MICRO_BLINK_IOS} from '@env';
+import {MICRO_BLINK_ANDROID, MICRO_BLINK_IOS, API_URL} from '@env';
+import axios from 'axios';
 
 const licenseKey = Platform.select({
   // iOS license key for applicationID: com.microblink.sample
@@ -52,6 +53,17 @@ function buildDateResult(result, key) {
     );
   }
   return '';
+}
+
+async function sendResults(data) {
+  // await axios.post(`${API_URL}/application/v1/requirements?data=${data}`);
+  await fetch(`${API_URL}/application/v1/requirements`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: {data}, // Send the data in the request body
+  });
 }
 
 export default class DriversLicense extends Component {
@@ -325,7 +337,7 @@ export default class DriversLicense extends Component {
           automaticallyAdjustContentInsets={false}
           scrollEventThrottle={200}
           y>
-          <Text style={styles.results}>{displayFields}</Text>
+          <Text style={styles.results}>{JSON.stringify(displayFields)}</Text>
           {renderIf(
             this.state.showFrontImageDocument,
             <View style={styles.imageContainer}>
@@ -366,6 +378,9 @@ export default class DriversLicense extends Component {
               />
             </View>,
           )}
+          <Button onPress={() => sendResults(displayFields)}>
+            send results
+          </Button>
         </ScrollView>
       </View>
     );

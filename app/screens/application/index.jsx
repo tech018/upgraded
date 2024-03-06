@@ -43,6 +43,24 @@ export default function ApplicationEntry() {
         }}>
         Let's go
       </Button>
+      <Button
+        onPress={() =>
+          navigation.navigate('ApplicationStack', {
+            screen: 'DRIVERSLICENSESCREEN',
+          })
+        }
+        mt="2"
+        bg="primary.800"
+        size="lg"
+        style={{
+          borderRadius: 25,
+          height: 45,
+          marginTop: 10,
+          marginLeft: 10,
+          marginRight: 10,
+        }}>
+        Try Later
+      </Button>
     </Box>
   );
 }
