@@ -6,14 +6,18 @@ export default function ApplicationEntry() {
   return (
     <Box>
       <Center>
+        <Text fontSize="2xl" mt={10}>
+          Let's start your application
+        </Text>
         <Image
           source={require('../../assets/images/lock.png')}
           w={250}
           height={150}
           marginTop={10}
           marginBottom={5}
+          alt="image"
         />
-        <Text pr={5} pl={5}>
+        <Text pr={5} pl={5} textAlign="justify">
           Welcome to our Electronic Gatepass Mobile App, where convenience meets
           security! Streamline your access control process with our
           user-friendly application designed to enhance your entry experience.
@@ -37,7 +41,7 @@ export default function ApplicationEntry() {
           marginLeft: 10,
           marginRight: 10,
         }}>
-        Start My Application
+        Let's go
       </Button>
     </Box>
   );
