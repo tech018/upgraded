@@ -4,6 +4,7 @@
  */
 
 import React, {Component} from 'react';
+
 import * as BlinkIDReactNative from 'blinkid-react-native';
 import {
   Platform,
@@ -33,7 +34,7 @@ var renderIf = function (condition, content) {
 
 function buildResult(result, key) {
   if (result && result != -1) {
-    return key + ': ' + result + '\n';
+    return key + ': ' + result + '>';
   }
   return '';
 }
@@ -55,18 +56,35 @@ function buildDateResult(result, key) {
   return '';
 }
 
-async function sendResults(data) {
-  // await axios.post(`${API_URL}/application/v1/requirements?data=${data}`);
-  await fetch(`${API_URL}/application/v1/requirements`, {
-    method: 'POST',
+async function sendResults(data, email, navigation) {
+  const config = {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: {data}, // Send the data in the request body
-  });
+  };
+  await axios
+    .post(
+      `${API_URL}/application/v1/requirements`,
+      {
+        data,
+        email,
+      },
+      config,
+    )
+    .then(res => {
+      if (res) {
+        navigation.navigate('DashboardStack', {screen: res.data.redirect});
+      }
+    });
 }
 
-export default class DriversLicense extends Component {
+function AddLineBreak(originalText) {
+  const newText = originalText.replace(/>/g, '\n');
+  const key = newText.replace(/_/g, ' ');
+  return key;
+}
+
+export class DriversLicense extends Component {
   constructor(props) {
     super(props);
 
@@ -86,15 +104,6 @@ export default class DriversLicense extends Component {
 
   async scan() {
     try {
-      // to scan any machine readable travel document (passports, visas and IDs with
-      // machine readable zone), use MrtdRecognizer
-      // var mrtdRecognizer = new BlinkIDReactNative.MrtdRecognizer();
-      // mrtdRecognizer.returnFullDocumentImage = true;
-
-      // var mrtdSuccessFrameGrabber = new BlinkIDReactNative.SuccessFrameGrabberRecognizer(mrtdRecognizer);
-
-      // BlinkIDMultiSideRecognizer automatically classifies different document types and scans the data from
-      // the supported document
       var blinkIdMultiSideRecognizer =
         new BlinkIDReactNative.BlinkIdMultiSideRecognizer();
       blinkIdMultiSideRecognizer.returnFullDocumentImage = true;
@@ -185,7 +194,7 @@ export default class DriversLicense extends Component {
       let resultString =
         buildResult(blinkIdResult.firstName.description, 'First name') +
         buildResult(blinkIdResult.lastName.description, 'Last name') +
-        buildResult(blinkIdResult.fullName.description, 'Full name') +
+        buildResult(blinkIdResult.fullName.description, 'Full_name') +
         buildResult(blinkIdResult.localizedName.description, 'Localized name') +
         buildResult(
           blinkIdResult.additionalNameInformation.description,
@@ -198,7 +207,7 @@ export default class DriversLicense extends Component {
         ) +
         buildResult(
           blinkIdResult.documentNumber.description,
-          'Document number',
+          'Document_number',
         ) +
         buildResult(
           blinkIdResult.documentAdditionalNumber.description,
@@ -210,10 +219,10 @@ export default class DriversLicense extends Component {
           'Issuing authority',
         ) +
         buildResult(blinkIdResult.nationality.description, 'Nationality') +
-        buildDateResult(blinkIdResult.dateOfBirth, 'Date of birth') +
+        buildDateResult(blinkIdResult.dateOfBirth, 'Date_of_birth') +
         buildResult(blinkIdResult.age, 'Age') +
-        buildDateResult(blinkIdResult.dateOfIssue, 'Date of issue') +
-        buildDateResult(blinkIdResult.dateOfExpiry, 'Date of expiry') +
+        buildDateResult(blinkIdResult.dateOfIssue, 'Date_of_issue') +
+        buildDateResult(blinkIdResult.dateOfExpiry, 'Date_of_expiry') +
         buildResult(
           blinkIdResult.dateOfExpiryPermanent,
           'Date of expiry permanent',
@@ -306,15 +315,11 @@ export default class DriversLicense extends Component {
   }
 
   render() {
-    let displayFrontImageDocument = this.state.resultFrontImageDocument;
-    let displayBackImageDocument = this.state.resultBackImageDocument;
-    let displayImageFace = this.state.resultImageFace;
-    let displaySuccessFrame = this.state.successFrame;
     let displayFields = this.state.results;
-    console.log('result', this.state.results);
+
     return (
       <View style={styles.container}>
-        <Text style={styles.label}>Let's scan your Driver's License</Text>
+        <Text style={styles.label}>Driver's License Information</Text>
         <View style={styles.buttonContainer}>
           {renderIf(
             this.state.results.length <= 1,
@@ -323,65 +328,34 @@ export default class DriversLicense extends Component {
               style={{width: 350, height: 320}}
             />,
           )}
-
+          <Text style={styles.results}>{AddLineBreak(displayFields)}</Text>
           <Button
             w="100%"
             onPress={this.scan.bind(this)}
             title="Click to Scan"
             bg="primary.900"
             mt={10}>
-            Click to scan
+            {this.state.results.length <= 1 ? 'Scan ID' : 'Rescan ID'}
           </Button>
+
+          {renderIf(
+            this.state.results.length >= 1,
+            <Button
+              w="100%"
+              title="Click to Scan"
+              bg="primary.900"
+              mt={5}
+              onPress={() =>
+                sendResults(
+                  displayFields,
+                  this.props.route.params?.email,
+                  this.props.navigation,
+                )
+              }>
+              Next
+            </Button>,
+          )}
         </View>
-        <ScrollView
-          automaticallyAdjustContentInsets={false}
-          scrollEventThrottle={200}
-          y>
-          <Text style={styles.results}>{JSON.stringify(displayFields)}</Text>
-          {renderIf(
-            this.state.showFrontImageDocument,
-            <View style={styles.imageContainer}>
-              <Image
-                resizeMode="contain"
-                source={{uri: displayFrontImageDocument, scale: 3}}
-                style={styles.imageResult}
-              />
-            </View>,
-          )}
-          {renderIf(
-            this.state.showBackImageDocument,
-            <View style={styles.imageContainer}>
-              <Image
-                resizeMode="contain"
-                source={{uri: displayBackImageDocument, scale: 3}}
-                style={styles.imageResult}
-              />
-            </View>,
-          )}
-          {renderIf(
-            this.state.showImageFace,
-            <View style={styles.imageContainer}>
-              <Image
-                resizeMode="contain"
-                source={{uri: displayImageFace, scale: 3}}
-                style={styles.imageResult}
-              />
-            </View>,
-          )}
-          {renderIf(
-            this.state.showSuccessFrame,
-            <View style={styles.imageContainer}>
-              <Image
-                resizeMode="contain"
-                source={{uri: displaySuccessFrame, scale: 3}}
-                style={styles.imageResult}
-              />
-            </View>,
-          )}
-          <Button onPress={() => sendResults(displayFields)}>
-            send results
-          </Button>
-        </ScrollView>
       </View>
     );
   }
@@ -421,3 +395,5 @@ const styles = StyleSheet.create({
     margin: 10,
   },
 });
+
+export default DriversLicense;

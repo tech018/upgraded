@@ -9,7 +9,7 @@ import {
   Box,
 } from 'native-base';
 import {useForm} from 'react-hook-form';
-
+import converter from '../../helpers/converter';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {useEffect, useState} from 'react';
 
@@ -17,11 +17,14 @@ import authValidation from '../../validation/auth.validation';
 import Input from '../../components/input/index';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useNavigation} from '@react-navigation/native';
-import {usePostLoginUserMutation} from '../../store/auth.slice';
+import {ucredentials, usePostLoginUserMutation} from '../../store/auth.slice';
+import {Platform} from 'react-native';
+import {useDispatch} from 'react-redux';
 
 export default function LoginForm() {
   const toast = useToast();
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const [reqLogin, {data, isError, isLoading, isSuccess, error}] =
     usePostLoginUserMutation();
 
@@ -43,7 +46,7 @@ export default function LoginForm() {
         render: () => {
           return (
             <Box bg="red.800" px="2" py="1" rounded="sm" mb={5}>
-              <Text color="#ffffff"> {error.data.message}</Text>
+              <Text color="#ffffff"> {error.data?.message}</Text>
             </Box>
           );
         },
@@ -54,6 +57,13 @@ export default function LoginForm() {
   useEffect(() => {
     if (isSuccess) {
       setLoading(false);
+      dispatch(
+        ucredentials({
+          email: data.email,
+          token: data.token,
+        }),
+      );
+      navigation.navigate('DashBoardStack', {screen: data.redirect});
     }
   }, [isSuccess]);
 
@@ -65,6 +75,14 @@ export default function LoginForm() {
 
   const onSubmit = data => {
     reqLogin(data);
+    if (Platform.OS === 'ios') {
+      reqLogin({
+        email: converter.lowerCaseFirstLetter(data.email),
+        password: data.password,
+      });
+    } else {
+      reqLogin(data);
+    }
   };
 
   return (

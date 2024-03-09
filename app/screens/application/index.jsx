@@ -1,7 +1,9 @@
 import {useNavigation} from '@react-navigation/native';
 import {Box, Button, Center, Image, Text} from 'native-base';
+import {useSelector} from 'react-redux';
 
 export default function ApplicationEntry() {
+  const {auth} = useSelector(state => ({auth: state.auth}));
   const navigation = useNavigation();
   return (
     <Box>
@@ -29,6 +31,7 @@ export default function ApplicationEntry() {
         onPress={() =>
           navigation.navigate('ApplicationStack', {
             screen: 'DRIVERSLICENSESCREEN',
+            params: {email: auth.email},
           })
         }
         mt="2"

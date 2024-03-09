@@ -9,6 +9,7 @@ const initialState = {
     newpassword: null,
     email: null,
   },
+  userInfo: null,
 };
 
 export const authSlice = createSlice({
@@ -28,10 +29,14 @@ export const authSlice = createSlice({
       state.changepass.email = action.payload;
       return state;
     },
+    uinfo: (state, action) => {
+      state.userInfo = action.payload;
+      return state;
+    },
   },
 });
 
-export const {ucredentials, uotp, uemail} = authSlice.actions;
+export const {ucredentials, uotp, uemail, uinfo} = authSlice.actions;
 
 export default authSlice.reducer;
 

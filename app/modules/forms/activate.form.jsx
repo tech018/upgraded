@@ -4,13 +4,14 @@ import Input from '../../components/input';
 import {useForm} from 'react-hook-form';
 import validation from '../../validation/auth.validation';
 import {yupResolver} from '@hookform/resolvers/yup';
-import {usePutActivateUserMutation} from '../../store/auth.slice';
-import {useSelector} from 'react-redux';
+import {ucredentials, usePutActivateUserMutation} from '../../store/auth.slice';
+import {useDispatch, useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 
 const ActivateForm = () => {
   const toast = useToast();
   const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
   const {auth} = useSelector(state => ({auth: state.auth}));
   const [reqActivate, {data, isError, isLoading, isSuccess, error}] =
     usePutActivateUserMutation();
@@ -47,6 +48,7 @@ const ActivateForm = () => {
           );
         },
       });
+      dispatch(ucredentials({email: data.email, token: data.token}));
       navigate.navigate('ApplicationStack', {screen: data.redirect});
       2342;
     }
