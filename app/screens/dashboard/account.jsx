@@ -1,9 +1,13 @@
+import {useNavigation} from '@react-navigation/native';
 import moment from 'moment';
 import {Box, Button, Text} from 'native-base';
 import {StyleSheet} from 'react-native';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {ulogout} from '../../store/auth.slice';
 
 export default function AccountSettings() {
+  const navigate = useNavigation();
+  const dispatch = useDispatch();
   const {application} = useSelector(state => ({
     application: state.application,
   }));
@@ -28,6 +32,11 @@ export default function AccountSettings() {
   const formatGender = {
     M: 'Male',
     F: 'Female',
+  };
+
+  const logout = () => {
+    dispatch(ulogout(null));
+    navigate.navigate('AuthStack', {screen: 'AUTHLOGINSCREEN'});
   };
 
   return (
@@ -95,9 +104,7 @@ export default function AccountSettings() {
       </Box>
       <Box style={styles.button}>
         <Button
-          // isLoading={loading}
-          // isLoadingText="Signing in.."
-          // onPress={handleSubmit(onSubmit)}
+          onPress={() => logout()}
           bg="primary.900"
           p={2}
           size="lg"

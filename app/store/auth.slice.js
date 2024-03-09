@@ -33,10 +33,17 @@ export const authSlice = createSlice({
       state.userInfo = action.payload;
       return state;
     },
+    ulogout: (state, action) => {
+      state.userInfo = null;
+      state.changepass = null;
+      state.email = null;
+      state.token = action.payload;
+      return state;
+    },
   },
 });
 
-export const {ucredentials, uotp, uemail, uinfo} = authSlice.actions;
+export const {ucredentials, uotp, uemail, uinfo, ulogout} = authSlice.actions;
 
 export default authSlice.reducer;
 

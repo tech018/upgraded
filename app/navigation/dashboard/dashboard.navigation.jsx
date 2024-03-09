@@ -3,7 +3,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import DashboardScreens from './config';
 import {Icon} from 'native-base';
-
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 const DashBoardStack = createBottomTabNavigator();
 
 export default function DashboardNavigation() {
@@ -19,6 +19,15 @@ export default function DashboardNavigation() {
         },
         headerStyle: {backgroundColor: '#02851f'},
         headerTintColor: '#ffffff',
+        headerRight: () => (
+          <Icon
+            as={FontAwesome5}
+            name="bell"
+            size={6}
+            mr={15}
+            color="light.100"
+          />
+        ),
       }}>
       {DashboardScreens.map(screen => (
         <Screen

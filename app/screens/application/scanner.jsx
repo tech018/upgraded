@@ -73,7 +73,7 @@ async function sendResults(data, email, navigation) {
     )
     .then(res => {
       if (res) {
-        navigation.navigate('DashboardStack', {screen: res.data.redirect});
+        navigation.navigate('DashBoardStack', {screen: res.data.redirect});
       }
     });
 }
