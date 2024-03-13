@@ -1,3 +1,4 @@
+import {useNavigation} from '@react-navigation/native';
 import {
   Avatar,
   Box,
@@ -55,6 +56,7 @@ const data = [
 ];
 
 export default function Applications() {
+  const navigation = useNavigation();
   return (
     <Box m={15} flex={1}>
       <Heading fontSize="xl" mb={2}>
@@ -115,6 +117,11 @@ export default function Applications() {
       <Fab
         renderInPortal={false}
         shadow={2}
+        onPress={() =>
+          navigation.navigate('ApplicationStack', {
+            screen: 'ADDNEWAPPLICATIONSCREEN',
+          })
+        }
         size="sm"
         bgColor="primary.900"
         icon={<Icon color="white" as={<AntDesign name="plus" />} size="sm" />}

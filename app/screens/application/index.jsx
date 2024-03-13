@@ -9,7 +9,7 @@ export default function ApplicationEntry() {
     <Box>
       <Center>
         <Text fontSize="2xl" mt={10}>
-          Let's start your application
+          Let's start with your account information
         </Text>
         <Image
           source={require('../../assets/images/lock.png')}
@@ -45,24 +45,6 @@ export default function ApplicationEntry() {
           marginRight: 10,
         }}>
         Let's go
-      </Button>
-      <Button
-        onPress={() =>
-          navigation.navigate('ApplicationStack', {
-            screen: 'DRIVERSLICENSESCREEN',
-          })
-        }
-        mt="2"
-        bg="primary.800"
-        size="lg"
-        style={{
-          borderRadius: 25,
-          height: 45,
-          marginTop: 10,
-          marginLeft: 10,
-          marginRight: 10,
-        }}>
-        Try Later
       </Button>
     </Box>
   );

@@ -14,7 +14,7 @@ import {
   Image,
   ScrollView,
 } from 'react-native';
-import {Button} from 'native-base';
+import {Box, Button, Toast} from 'native-base';
 import {MICRO_BLINK_ANDROID, MICRO_BLINK_IOS, API_URL} from '@env';
 import axios from 'axios';
 
@@ -74,6 +74,30 @@ async function sendResults(data, email, navigation) {
     .then(res => {
       if (res) {
         navigation.navigate('DashBoardStack', {screen: res.data.redirect});
+      }
+    })
+    .catch(error => {
+      if (error) {
+        Toast.show({
+          render: () => {
+            return (
+              <Box
+                bg="red.800"
+                marginLeft={15}
+                marginRight={15}
+                px="2"
+                py="1"
+                rounded="sm"
+                mb={5}>
+                <Text style={{color: '#ffffff'}}>
+                  {error.response && error.response.data.message
+                    ? error.response.data.message
+                    : error.message}
+                </Text>
+              </Box>
+            );
+          },
+        });
       }
     });
 }
@@ -339,7 +363,7 @@ export class DriversLicense extends Component {
           </Button>
 
           {renderIf(
-            this.state.results.length >= 1,
+            this.state.results.length > 1,
             <Button
               w="100%"
               title="Click to Scan"

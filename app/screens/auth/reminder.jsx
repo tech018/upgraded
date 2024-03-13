@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingLeft: 10,
     paddingRight: 10,
-    marginTop: Platform.OS === 'android' ? 20 : 0,
+    marginTop: Platform.OS === 'android' ? 10 : 0,
   },
 
   textSmall: {

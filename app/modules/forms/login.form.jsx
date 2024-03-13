@@ -51,8 +51,22 @@ export default function LoginForm() {
           );
         },
       });
+
+      setTimeout(() => {
+        if (error.data.redirectCode === 112) {
+          dispatch(
+            ucredentials({
+              email: error.data.email,
+              token: error.data.token,
+            }),
+          );
+          navigation.navigate('ApplicationStack', {
+            screen: error.data.redirect,
+          });
+        }
+      }, 3000);
     }
-  }, [isError]);
+  }, [isError, dispatch]);
 
   useEffect(() => {
     if (isSuccess) {
@@ -65,7 +79,7 @@ export default function LoginForm() {
       );
       navigation.navigate('DashBoardStack', {screen: data.redirect});
     }
-  }, [isSuccess]);
+  }, [isSuccess, dispatch, data]);
 
   useEffect(() => {
     if (isLoading) {
