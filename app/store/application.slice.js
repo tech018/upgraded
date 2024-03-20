@@ -2,6 +2,10 @@ import {createSlice} from '@reduxjs/toolkit';
 import apiSlice from './api.slice';
 const initialState = {
   driversInfo: null,
+  applications: {
+    plateNumber: null,
+    applicationType: null,
+  },
 };
 
 export const applicationSlice = createSlice({
@@ -12,10 +16,19 @@ export const applicationSlice = createSlice({
       ...state,
       driversInfo: action.payload,
     }),
+    uPlateNumber: (state, action) => {
+      state.applications.plateNumber = action.payload;
+      return state;
+    },
+    uApplicantType: (state, action) => {
+      state.applications.applicationType = action.payload;
+      return state;
+    },
   },
 });
 
-export const {uDriversInfo} = applicationSlice.actions;
+export const {uDriversInfo, uPlateNumber, uApplicantType} =
+  applicationSlice.actions;
 
 export default applicationSlice.reducer;
 

@@ -49,10 +49,9 @@ const items = [
 export default function Dashboard() {
   const [loadingDriver, setLoadingDriver] = useState(false);
   const dispatch = useDispatch();
-  const {auth, application} = useSelector(state => ({
-    auth: state.auth,
-    application: state.application,
-  }));
+
+  const auth = useSelector(state => state.application);
+  const application = useSelector(state => state.application);
 
   console.log('application', application);
 

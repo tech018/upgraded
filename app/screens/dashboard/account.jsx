@@ -8,9 +8,7 @@ import {ulogout} from '../../store/auth.slice';
 export default function AccountSettings() {
   const navigate = useNavigation();
   const dispatch = useDispatch();
-  const {application} = useSelector(state => ({
-    application: state.application,
-  }));
+  const application = useSelector(state => state.application);
   const driversInfo = application?.driversInfo;
 
   const formatDate = date => {

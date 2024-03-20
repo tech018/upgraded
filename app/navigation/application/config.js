@@ -11,7 +11,7 @@ export const NAVIGATION_NAME = {
 const NAVIGATION_TITLE = {
   ENTRY: 'Application',
   DRIVERSLICENSE: "Driver's License",
-  ADDNEW: 'Add New Application',
+  ADDNEW: 'New Application',
 };
 
 const ApplicationScreen = [

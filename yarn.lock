@@ -6795,6 +6795,11 @@
     "lodash" "^4.17.21"
     "prop-types" "^15.7.2"
 
+"react-native-image-picker@^4.10.3":
+  "integrity" "sha512-gLX8J6jCBkUt6jogpSdA7YyaGVLGYywRzMEwBciXshihpFZjc/cRlKymAVlu6Q7HMw0j3vrho6pI8ZGC5O/FGg=="
+  "resolved" "https://registry.npmjs.org/react-native-image-picker/-/react-native-image-picker-4.10.3.tgz"
+  "version" "4.10.3"
+
 "react-native-otp-entry@^1.4.1":
   "integrity" "sha512-AAZLgEX1fWcYVE7XVxkHbSbp9VtsUqvzJmC9PzQAEVPENNh9+BT0uTWq7O21hMdMFo3lSugCzyG/H4OR9zR3ug=="
   "resolved" "https://registry.npmjs.org/react-native-otp-entry/-/react-native-otp-entry-1.4.1.tgz"
