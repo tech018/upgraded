@@ -4,7 +4,7 @@ import {useState, useLayoutEffect} from 'react';
 import {StyleSheet, TouchableOpacity} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import {uApplicantType} from '../../store/application.slice';
+import {uVehicleType} from '../../store/application.slice';
 
 const items = [
   {
@@ -75,7 +75,8 @@ export default function AddVehicleForm({active, setActive}) {
   }, [navigation]);
 
   const handleNext = () => {
-    dispatch(uApplicantType(selected));
+    dispatch(uVehicleType(selected));
+    setActive(active + 1);
   };
 
   return (

@@ -5,6 +5,7 @@ const initialState = {
   applications: {
     plateNumber: null,
     applicationType: null,
+    vehicleType: null,
   },
 };
 
@@ -24,10 +25,14 @@ export const applicationSlice = createSlice({
       state.applications.applicationType = action.payload;
       return state;
     },
+    uVehicleType: (state, action) => {
+      state.applications.vehicleType = action.payload;
+      return state;
+    },
   },
 });
 
-export const {uDriversInfo, uPlateNumber, uApplicantType} =
+export const {uDriversInfo, uPlateNumber, uApplicantType, uVehicleType} =
   applicationSlice.actions;
 
 export default applicationSlice.reducer;
@@ -43,8 +48,19 @@ export const applicationApiSlice = apiSlice.injectEndpoints({
         },
       }),
     }),
+    PostCreateApplication: builder.mutation({
+      query: args => ({
+        url: `/application/v1/create/application?`,
+        method: 'GET',
+        body: args,
+        headers: {
+          authorization: `Bearer ${args.token}`,
+        },
+      }),
+    }),
   }),
   overrideExisting: true,
 });
 
-export const {useGetDriverInfoMutation} = applicationApiSlice;
+export const {useGetDriverInfoMutation, usePostCreateApplicationMutation} =
+  applicationApiSlice;

@@ -90,7 +90,7 @@ export default function AddApplicationForm({active, setActive}) {
         onPress={handleSubmit(onSubmit)}
         bg="primary.900"
         size="lg"
-        style={{borderRadius: 25, height: 45, marginTop: 30}}>
+        style={{borderRadius: 25, height: 45, marginTop: 10}}>
         Next
       </Button>
     </VStack>

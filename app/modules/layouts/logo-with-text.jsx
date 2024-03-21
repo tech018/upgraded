@@ -25,16 +25,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   logo: {
-    width: 70,
-    height: 70,
+    width: 90,
+    height: 90,
   },
   headerTitle: {
-    fontSize: 18,
+    fontSize: 21,
     fontWeight: 'bold',
-    lineHeight: 25,
+    lineHeight: 30,
   },
   subtitle: {
-    fontSize: 13,
+    fontSize: 16,
     fontWeight: '300',
     lineHeight: 15,
   },

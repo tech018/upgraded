@@ -2,7 +2,6 @@ import {Box, Text, Heading, Stack, ScrollView, Skeleton} from 'native-base';
 import React, {useEffect, useState} from 'react';
 import StatusItems from '../../modules/statusItems';
 import {Image} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   uDriversInfo,
@@ -50,15 +49,11 @@ export default function Dashboard() {
   const [loadingDriver, setLoadingDriver] = useState(false);
   const dispatch = useDispatch();
 
-  const auth = useSelector(state => state.application);
+  const auth = useSelector(state => state.auth);
   const application = useSelector(state => state.application);
-
-  console.log('application', application);
 
   const [reqDriver, {data, error, isError, isLoading, isSuccess}] =
     useGetDriverInfoMutation();
-
-  const navigation = useNavigation();
 
   useEffect(() => {
     reqDriver({email: auth.email, token: auth.token});
@@ -73,7 +68,7 @@ export default function Dashboard() {
   useEffect(() => {
     if (isSuccess) {
       setLoadingDriver(false);
-      console.log('data', data);
+
       dispatch(uDriversInfo(data.userInfo));
     }
   }, [isSuccess]);
