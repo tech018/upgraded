@@ -6,6 +6,7 @@ const initialState = {
     plateNumber: null,
     applicationType: null,
     vehicleType: null,
+    image: null,
   },
 };
 
@@ -29,11 +30,20 @@ export const applicationSlice = createSlice({
       state.applications.vehicleType = action.payload;
       return state;
     },
+    uImage: (state, action) => {
+      state.applications.image = action.payload;
+      return state;
+    },
   },
 });
 
-export const {uDriversInfo, uPlateNumber, uApplicantType, uVehicleType} =
-  applicationSlice.actions;
+export const {
+  uDriversInfo,
+  uPlateNumber,
+  uApplicantType,
+  uVehicleType,
+  uImage,
+} = applicationSlice.actions;
 
 export default applicationSlice.reducer;
 
@@ -58,9 +68,19 @@ export const applicationApiSlice = apiSlice.injectEndpoints({
         },
       }),
     }),
+    PostUploadOR: builder.mutation({
+      query: args => ({
+        url: `/application/v1/oruploader?plateNumber=${args.plateNumber}`,
+        method: 'POST',
+        body: args.image,
+      }),
+    }),
   }),
   overrideExisting: true,
 });
 
-export const {useGetDriverInfoMutation, usePostCreateApplicationMutation} =
-  applicationApiSlice;
+export const {
+  useGetDriverInfoMutation,
+  usePostCreateApplicationMutation,
+  usePostUploadORMutation,
+} = applicationApiSlice;

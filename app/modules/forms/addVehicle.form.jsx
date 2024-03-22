@@ -106,8 +106,6 @@ export default function AddVehicleForm({active, setActive}) {
         ))}
       </Box>
       <Button
-        // isLoading={loading}
-        // isLoadingText="Activating account"
         onPress={handleNext}
         bg="primary.900"
         disabled={selected === '' ? true : false}

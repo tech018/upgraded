@@ -1,28 +1,27 @@
 const pricingConfig = {
   student: {
-    motorcycle: 25,
+    motor: 25,
     tricycle: 50,
-    '4wheels': 75,
+    fourwheelmore: 75,
   },
   employee: {
-    motorcycle: 50,
+    motor: 50,
     tricycle: 75,
-    '4wheels': 100,
+    fourwheelmore: 100,
   },
   publicvehicle: {
-    motorcycle: 100,
+    motor: 100,
     tricycle: 100,
-    '4wheels': 100,
+    fourwheelmore: 100,
   },
-  default: {
-    motorcycle: 75,
+  others: {
+    motor: 75,
     tricycle: 125,
-    '4wheels': 150,
+    fourwheelmore: 150,
   },
 };
 
 export const paymentHelper = (type, vehicle) => {
-  // Determine pricing based on type and vehicle
-  const pricing = pricingConfig[type.toLowerCase()] || pricingConfig.default;
-  return pricing[vehicle.toLowerCase()] || pricing['4wheels'];
+  const pricing = pricingConfig[type.toLowerCase()];
+  return pricing[vehicle.toLowerCase()];
 };
