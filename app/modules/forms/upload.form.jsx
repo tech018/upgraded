@@ -5,7 +5,7 @@ import * as ImagePicker from 'react-native-image-picker';
 import {request, PERMISSIONS} from 'react-native-permissions';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {usePostUploadORMutation} from '../../store/application.slice';
+import {uImage, usePostUploadORMutation} from '../../store/application.slice';
 import {useDispatch, useSelector} from 'react-redux';
 const includeExtra = true;
 
@@ -32,7 +32,7 @@ export default function UploadOfficialReciept({active, setActive}) {
         render: () => {
           return (
             <Box bg="red.800" px="2" py="1" rounded="sm" mb={5}>
-              <Text color="#ffffff"> {error.data.message}</Text>
+              <Text color="#ffffff"> {error.data?.message}</Text>
             </Box>
           );
         },
@@ -49,7 +49,7 @@ export default function UploadOfficialReciept({active, setActive}) {
         render: () => {
           return (
             <Box bg="primary.900" px="2" py="1" rounded="sm" mb={5}>
-              <Text color="#ffffff"> {data.message}</Text>
+              <Text color="#ffffff"> {data?.message}</Text>
             </Box>
           );
         },
@@ -108,7 +108,11 @@ export default function UploadOfficialReciept({active, setActive}) {
           includeBase64: false,
           includeExtra,
         };
-        ImagePicker.launchCamera(options, setResponse);
+        ImagePicker.launchCamera(options, setResponse).then(result => {
+          if (result.didCancel) {
+            return setResponse(null);
+          }
+        });
       } else {
         console.log('Camera permission denied');
       }
@@ -134,7 +138,11 @@ export default function UploadOfficialReciept({active, setActive}) {
       };
     }
 
-    ImagePicker.launchImageLibrary(options, setResponse);
+    ImagePicker.launchImageLibrary(options, setResponse).then(result => {
+      if (result?.didCancel) {
+        return setResponse(null);
+      }
+    });
   }, []);
 
   const cancelUpload = () => {
@@ -142,16 +150,18 @@ export default function UploadOfficialReciept({active, setActive}) {
   };
 
   const confirmUpload = () => {
-    const photo = {
-      uri: response.assets[0].uri,
-      type: response.assets[0].type,
-      name: response.assets[0].fileName,
-    };
-    let formData = new FormData();
-    //append created photo{} to formdata
-    formData.append('image', photo);
+    if (response?.assets) {
+      const photo = {
+        uri: response.assets[0].uri,
+        type: response.assets[0].type,
+        name: response.assets[0].fileName,
+      };
+      let formData = new FormData();
+      //append created photo{} to formdata
+      formData.append('image', photo);
 
-    reqUpload({image: formData, plateNumber});
+      reqUpload({image: formData, plateNumber});
+    }
   };
 
   return (
@@ -197,14 +207,16 @@ export default function UploadOfficialReciept({active, setActive}) {
         </>
       ) : (
         <>
-          <Image
-            mt={10}
-            m="auto"
-            source={{uri: response?.assets[0].uri}}
-            w={350}
-            height={350}
-            alt="sample"
-          />
+          {response?.assets && (
+            <Image
+              mt={10}
+              m="auto"
+              source={{uri: response?.assets[0].uri}}
+              w={350}
+              height={350}
+              alt="sample"
+            />
+          )}
           <Button
             bg="primary.900"
             isLoading={loading}

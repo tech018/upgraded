@@ -61,8 +61,8 @@ export const applicationApiSlice = apiSlice.injectEndpoints({
     PostCreateApplication: builder.mutation({
       query: args => ({
         url: `/application/v1/create/application?`,
-        method: 'GET',
-        body: args,
+        method: 'POST',
+        body: args.payload,
         headers: {
           authorization: `Bearer ${args.token}`,
         },
@@ -73,6 +73,9 @@ export const applicationApiSlice = apiSlice.injectEndpoints({
         url: `/application/v1/oruploader?plateNumber=${args.plateNumber}`,
         method: 'POST',
         body: args.image,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       }),
     }),
   }),
